@@ -2,7 +2,6 @@
 services:
   app:
     build: .                
-    image: sgti-app
     container_name: cake_app
     restart: no
     ports:

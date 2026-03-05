@@ -51,6 +51,10 @@ O MVP implementa **controle de acesso simples**, com dois perfis:
 ```bash
 git clone <URL_DO_REPOSITORIO>
 ```
+2. Caso acontece problemas com as permissões, se necessário execute: 
+```bash
+docker exec -it cake_app sh -c "chown -R www-data:www-data /var/www/html && chmod -R 777 /var/www/html/app/tmp"
+```
 
 ## 📌 Observações
 
@@ -59,3 +63,4 @@ git clone <URL_DO_REPOSITORIO>
 - Todos os ativos devem ter número de série único para garantir rastreabilidade.
 - O documento completo de requisitos está disponível em docs/SRS_SIGATI.pdf.
 - Iniciar o servidor local (CakePHP) e acessar via navegador.
+

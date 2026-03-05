@@ -1,9 +1,16 @@
-create table categories (
+create table asset_types (
 	id BIGINT generated always as IDENTITY PRIMARY KEY, 
-	name varchar(255) not null unique
+	name TEXT not null unique
+	created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-insert into categories (name) values 
+CREATE TRIGGER tr_asset_types_update_modified
+BEFORE UPDATE ON asset_types
+FOR EACH ROW
+EXECUTE FUNCTION update_modified_column();
+
+insert into asset_types (name) values 
 ('Desktop'),
 ('Notebooks'),
 ('Servidores'),
