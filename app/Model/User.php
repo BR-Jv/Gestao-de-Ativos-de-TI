@@ -1,26 +1,44 @@
-<?php 
+<?php
 
 App::uses('AppModel', 'Model');
 App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 
-class User extends AppModel {
+class User extends AppModel
+{
     public $validate = array(
-        'username' => array(
-            'required' => array(
-                'rule' => 'notBlank',
-                'message' => 'O username é obrigatório'
-            ),
-            'alphaNumeric' => array(
-                'rule' => 'alphaNumeric',
-                'message' => 'Só são aceitos letras e números.'
-            )
+
+        'name' => array(
+            'rule' => 'notBlank',
+            'required' => true,
+            'allowempty' => false,
+            'on' => 'created',
+            'message' => 'Nome é um campo obrigatório'
+        ),
+        'email' => array('rule' => array('email', true), 'message' => 'Coloque um email válido.'),
+        'login' => array(
+            'rule' => '/^[0-9]{11}$/i',
+            'required' => true,
+            'allowempty' => false,
+            'message' => 'Digite sem o pontos e traço'
         ),
         'password' => array(
-            'required' => array(
-                'rule' => 'notBlank',
-                'message' => 'A senha é obrigatória'
+            'rule' => 'notBlank',
+            'required' => true,
+            'allowempty' => false,
+            'on' => 'created',
+            'message' => 'Password é um campo obrigatório'
+        ),
+        'role' => array(
+            'valid' => array(
+                'rule' => array('inList', array('admin', 'gestor')),
+                'message' => 'Escolha um campo válido',
             )
-        )
+        ),
+        'status' => array(
+            'rule' => array('boolean'),
+            'message' => 'Status é um campo obrigatório'
+        ),
+
         // 'role' => array(
         //     'valid' => array(
         //         'rule' => array('inList', array('ADM', 'TEC')),
@@ -32,11 +50,15 @@ class User extends AppModel {
 
     public function beforeSave($options = array())
     {
-        if(isset($this->data[$this->alias]['password'])) 
-        {
+        if (isset($this->data[$this->alias]['password'])) {
             $passwordHasher = new BlowfishPasswordHasher();
             $this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
         }
+        /** @var DboSource $db */
+        $db = $this->getDataSource(); 
+        $this->data[$this->alias]['created_at'] = $db->expression('NOW()');
+        $this->data[$this->alias]['modified_at'] = $db->expression('NOW()');
+        
         return true;
     }
 }
