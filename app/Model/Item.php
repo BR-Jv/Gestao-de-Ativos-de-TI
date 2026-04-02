@@ -1,45 +1,52 @@
 <?php 
 
 class Item extends AppModel {
+    public $useTable = 'assets';
     public $name = 'Item';
 
-    //TODO: Fazer validação para a categoria
     public $validate = array(
-        'name' => array('rule' => 'notBlank'),
-        'quantity' => array(
-            'notBlank' => array(
-                'rule' => 'notblank',
-                'message' => 'Campo não pode ser vazio'
-            ),
-            'naturalNumber' => array(
-                'rule' => 'naturalNumber',
-                'message' => 'Indique um número maior que zero.'
+        'asset_type' => array(
+            'required' => array(
+                'rule' => 'notblank', 
+                'message' => 'Campo obrigatorio'
+            )
+        ),
+        'location_id' => array(
+            'required' => array(
+                'rule' => 'notblank', 
+                'message' => 'Campo obrigatorio'
+            )
+        ),
+        'serial_number' => array(
+            'required' => array(
+                'rule' => 'isUnique', 
+                'message' => 'Já existe esse serial number cadastrado'
+            )
+        ),
+        'asset_tag' => array('required' => array(
+                'rule' => 'isUnique', 
+                'message' => 'Já existe essa tag cadastrado'
+            )),
+        'status' => array(
+            'valid' => array(
+                'rule' => array('inList', array('disponivel', 'em_uso', 'manutencao', 'retirado', 'perdido')),
+                'message' => 'Escolha uma opção válida',
             )
         ),
     );
 
-    /**
-     * Consulta o estoque do item
-     *
-     * @param int $id ID do item.
-     * @return int Retorna a quantidade em estoque 
-     */
-    public function getEstoque(int $id){
-        $sql_quantity_stock = "SELECT i.quantity FROM items i WHERE i.id = $id";
-        return Hash::get($this->query($sql_quantity_stock), '0.0.quantity');
-    }
-
-
-    public function diminuiEstoque(array $data){
-        try {
-            $id = $data['id'];
-            $newQuantity = $data['estoque'] - $data['qtd_movimentada'];
-            $sql = "UPDATE items SET quantity = $newQuantity WHERE id = $id";
-            $this->query($sql);
-            return true;
-        } catch (\Throwable $th) {
-            return false;
-        }
+    public function beforeSave($options = array())
+    {
         
+        /** @var DboSource $db */
+        $db = $this->getDataSource(); 
+        
+        //* Tenho que verificar quando é um save ou edit 
+        $this->data[$this->alias]['created_at'] = $db->expression('NOW()');
+        
+        $this->data[$this->alias]['modified_at'] = $db->expression('NOW()');
+        
+        return true;
     }
+
 }

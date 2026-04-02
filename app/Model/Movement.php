@@ -2,6 +2,7 @@
 
 
 class Movement extends AppModel {
+    public $useTable = 'asset_movements';
     public $name = 'Movement';
 
     public $validate = array(

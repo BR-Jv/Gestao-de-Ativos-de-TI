@@ -56,7 +56,7 @@ class User extends AppModel
         }
         /** @var DboSource $db */
         $db = $this->getDataSource(); 
-        $this->data[$this->alias]['created_at'] = $db->expression('NOW()');
+        $this->data[$this->alias]['created_at'] = $db->expression('NOW()'); //? Se eu editar essa coluna vai ser alterada ? 
         $this->data[$this->alias]['modified_at'] = $db->expression('NOW()');
         
         return true;
