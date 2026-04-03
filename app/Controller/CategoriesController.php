@@ -44,15 +44,7 @@ class CategoriesController extends AppController
 
     public function delete($id)
     {
-        $this->Category->id = $id; 
-        if(!$this->Category->exists()){
-            throw new NotFoundException(__('Categoria não foi encontrado em nossa base de dados.'));
-        }
-
-        if($this->Category->delete($id)){
-            $this->Flash->success(__('Categoria desativado com sucesso!'));
-            return $this->redirect(array('action' => 'tolist'));  
-        }
+        
     }
 
     

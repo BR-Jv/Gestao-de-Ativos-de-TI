@@ -5,6 +5,12 @@
             'action' => 'edit',
             $itens['Item']['id']
         )); ?>
+        / 
+        <?php echo $this->Form->postLink(
+            'Delete', 
+            array('action' => 'delete', $itens['Item']['id']),
+            array('confirm' => 'Tem certeza ?')
+        ); ?>
         </br>
     <?php }; ?>
 <?php } else { ?>

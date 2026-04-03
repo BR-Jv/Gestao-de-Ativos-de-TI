@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS assets (
     brand TEXT,
     model TEXT,
     status TEXT NOT NULL DEFAULT 'disponivel' 
-        CHECK (status IN ('disponivel', 'em_uso', 'manutencao', 'retirado', 'perdido')),
+        CHECK (status IN ('disponivel', 'em_uso', 'manutencao', 'retirado', 'perdido', 'baixado')),
 
     purchase_date DATE,
     notes TEXT,

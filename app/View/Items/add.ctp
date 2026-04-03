@@ -2,6 +2,7 @@
     <?php echo $this->Form->create('Item'); ?>
         <legend><?php echo __('Cadastrar Item'); ?></legend>  
         <?php 
+            //TODO - Deve ter um campo relacionando a um usuário / Funcionário - contempla o RF-01.4 
             echo $this->Form->input('asset_type_id', array('label' => 'Categorias', 'options' =>  $categories));
             echo $this->Form->input('location_id', array('label' => 'Departamentos', 'options' =>  $locations));
             echo $this->Form->input('serial_number', array('type' => 'text','label' => 'Serial Number'));

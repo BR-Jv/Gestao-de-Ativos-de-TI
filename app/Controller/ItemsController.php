@@ -7,7 +7,9 @@ class ItemsController extends AppController
 
     public function tolist()
     {
-        $this->set('items', $this->Item->find('all'));
+        $this->set('items', $this->Item->find('all', array(
+            'conditions' => array('Item.status !=' => 'baixado')
+        )));
     }
 
     public function add()
@@ -23,6 +25,7 @@ class ItemsController extends AppController
 
         $this->set('categories', $this->Category->find('list'));
         $this->set('locations', $this->Locations->find('list'));
+        //TODO - Deve ter um campo relacionando a um usuário / Funcionário - contempla o RF-01.4 
     }
 
     public function edit($id = null) 
@@ -46,6 +49,7 @@ class ItemsController extends AppController
         } 
         
         if(!$this->request->data){
+            //TODO - Deve ter um campo relacionando a um usuário / Funcionário - contempla o RF-01.4
             $this->set('categories', $this->Category->find('list'));
             $this->set('locations', $this->Locations->find('list'));
             $this->request->data = $asset;
@@ -54,15 +58,19 @@ class ItemsController extends AppController
 
     public function delete($id)
     {
-        $this->Item->id = $id; 
-        if(!$this->Item->exists()){
-            throw new NotFoundException(__('Item não foi encontrado em nossa base de dados.'));
+        if($this->request->is('get')) {
+            throw new MethodNotAllowedException();
         }
 
-        if($this->Item->delete($id)){
-            $this->Flash->success(__('Item desativado com sucesso!'));
-            return $this->redirect(array('action' => 'tolist'));  
+        $this->Item->id = $id;
+        if($this->Item->saveField('status', 'baixado')){
+            $this->Flash->success(__('Item com id %s foi deletado com sucesso.', h($id)));
+        }else {
+            $this->Flash->success(__('Item com id %s não pode ser deletado.', h($id)));
         }
+                
+        return $this->redirect(array('action' => 'tolist'));  
+
     }
 
     
