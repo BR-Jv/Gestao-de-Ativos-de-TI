@@ -7,7 +7,7 @@
         )); ?>
         / 
         <?php echo $this->Form->postLink(
-            'Delete', 
+            'Dar baixa', 
             array('action' => 'delete', $itens['Item']['id']),
             array('confirm' => 'Tem certeza ?')
         ); ?>

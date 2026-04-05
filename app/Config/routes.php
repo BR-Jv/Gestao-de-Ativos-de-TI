@@ -49,6 +49,10 @@
 	Router::connect('/locations/edit/', array('controller' => 'locations', 'action' => 'edit'));
 	Router::connect('/locations/delete/', array('controller' => 'locations', 'action' => 'delete'));
 
+	Router::connect('/movements/tolist/', array('controller' => 'movements', 'action' => 'tolist'));
+	Router::connect('/movements/add/', array('controller' => 'movements', 'action' => 'add'));
+
+
 	/**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

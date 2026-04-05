@@ -6,21 +6,42 @@ class Movement extends AppModel {
     public $name = 'Movement';
 
     public $validate = array(
-        //TODO: Fazer a validação dos outros campos
-        
-        'quantity' => array(
+        'asset_id' => array(
             'required' => array(
-                'rule' => 'notBlank',
-                'message' => 'A senha é obrigatória'
+                'rule' => 'notblank', 
+                'message' => 'Campo obrigatorio'
             )
         ),
-        'type' => array(
-            'valid' => array(
-                'rule' => array('inList', array('ENT', 'SAI')), 
-                'message' => 'Escolha um tipo válido',
-                'allowEmpty' => false
+        'to_location_id' => array(
+            'required' => array(
+                'rule' => 'notblank', 
+                'message' => 'Campo obrigatorio'
             )
-        )
+        ),
+        'to_user_id' => array(
+            'required' => array(
+                'rule' => 'notblank', 
+                'message' => 'Campo obrigatorio'
+            )
+        ),
+        
+        
+       
     );
+
+    public function beforeSave($options = array())
+    {
+        
+        /** @var DboSource $db */
+        $db = $this->getDataSource(); 
+        
+        if($this->data[$this->alias]['movement_date'] == null){
+            $this->data[$this->alias]['movement_date'] = $db->expression('NOW()');
+        }
+
+        $this->data[$this->alias]['created_at'] = $db->expression('NOW()');
+        
+        return true;
+    }
     
 }
